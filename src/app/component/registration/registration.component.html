@@ -6,12 +6,9 @@
         <ol class="breadcrumb darklinks">
           <li>
             <a href="./">
-        Home
-      </a>
-          </li>
-          <li>
-            <a href="#">Shop</a>
-          </li>
+              Home
+            </a>
+          </li>          
           <li class="active">Registration</li>
         </ol>
       </div>
@@ -25,24 +22,34 @@
 
     <div class="row">
 
-      <form class="shop-register" role="form">
+      <form class="register" role="form" (ngSubmit)="onSubmit()" method="POST" #registrationForm="ngForm">
 
+       
+          <div *ngIf="show_dialog" class="form-group validate-required" id="billing_first_name_field"> 
+              <label for="billing_first_name" class="control-label">
+                <span class="grey" style="color:red">{{errorMessage}}</span>
+                 
+              </label>
+            </div>
         <div class="col-sm-6">
+
+            
+
           <div class="form-group validate-required" id="billing_first_name_field">
             <label for="billing_first_name" class="control-label">
-              <span class="grey">First Name:</span>
+              <span class="grey">Event Name:</span>
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_first_name" id="billing_first_name" placeholder="" value="">
+            <input type="text" class="form-control " [(ngModel)]="event.eventName" name="eventName" id="eventName" placeholder="Provide a valid name to you problem/issue." value="eventName" required/>
           </div>
 
           <div class="form-group" id="billing_company_field">
             <label for="billing_company" class="control-label">
-              <span class="grey">Company Name:</span>
+              <span class="grey">Start By:</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_company" id="billing_company" placeholder="" value="">
+            <input type="text" class="form-control " [(ngModel)]="event.committeeorstartby" name="committeeorstartby" id="committeeorstartby" placeholder="who start this event." value="committeeorstartby" required/>
 
           </div>
 
@@ -52,11 +59,11 @@
         <div class="col-sm-6">
           <div class="form-group validate-required" id="billing_last_name_field">
             <label for="billing_last_name" class="control-label">
-              <span class="grey">Last Name:</span>
+              <span class="grey">Admin:</span>
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_last_name" id="billing_last_name" placeholder="" value="">
+            <input type="text" class="form-control"  [(ngModel)]="event.admins" name="admins" id="admins" placeholder="Who is your admin." value="admins" required />
 
           </div>
 
@@ -66,7 +73,7 @@
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_email" id="billing_email" placeholder="" value="">
+            <input type="email" class="form-control "  [(ngModel)]="event.emailId" name="emailId" id="emailId" placeholder="Please give your valid email Address." value="emailId" required />
 
           </div>
 
@@ -75,12 +82,24 @@
         <div class="col-sm-12">
           <div class="form-group address-field validate-required" id="billing_address_fields">
             <label for="billing_address_1" class="control-label">
-              <span class="grey">Address:</span>
+              <span class="grey">Problem:</span>
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_address_1" id="billing_address_1" placeholder="" value="">
+            <input type="text" class="form-control "  [(ngModel)]="event.eventProblem" name="eventProblem" id="eventProblem" placeholder="what problem you are faceing." value="eventProblem" required />
 
+          </div>
+
+        </div>
+
+        <div class="col-sm-12">
+          <div class="form-group address-field validate-required" id="billing_address_fields">
+            <label for="billing_address_1" class="control-label">
+              <span class="grey">Discription:</span>
+              <span class="required">*</span>
+            </label>
+
+             <textarea class="form-control" id="eventDescription" [(ngModel)]="event.eventDescription" name="eventDescription" placeholder="Discription your problem and issue in datials." value="eventDescription" required></textarea>
           </div>
 
         </div>
@@ -89,21 +108,25 @@
 
           <div class="form-group address-field validate-required" id="billing_city_field">
             <label for="billing_city" class="control-label">
-              <span class="grey">Town / City:</span>
+              <span class="grey">Taluka:</span>
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_city" id="billing_city" placeholder="" value="">
+            <input type="text" class="form-control "  [(ngModel)]="event.taluka" name="taluka" id="taluka" placeholder="Please enter Taluka." value="taluka" required />
 
           </div>
 
           <div class="form-group address-field validate-required validate-postcode" id="billing_postcode_field">
             <label for="billing_postcode" class="control-label">
-              <span class="grey">Postcode:</span>
+              <span class="grey">Distict:</span>
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_postcode" id="billing_postcode" placeholder="" value="">
+           
+            <select class="form-control"  [(ngModel)]="event.district" name="district" id="district">
+                <option value="">Select a district…</option>
+              <option [value]="district.name" *ngFor="let district of districts"> {{district.name | titlecase}}</option>
+            </select>
 
           </div>
 
@@ -113,10 +136,32 @@
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_phone" id="billing_phone" placeholder="" value="">
+            <input type="number" class="form-control "  [(ngModel)]="event.mobileNumber" name="mobileNumber" id="mobileNumber" placeholder="Please enter 10 digit phone number." value="1234567890" required />
 
           </div>
 
+
+          <div class="form-group">
+            <label for="billing_country" class="control-label">
+              <span class="grey">Event Type:</span>
+              <span class="required">*</span>
+            </label>
+
+            <select class="form-control"  [(ngModel)]="event.type" name="type" id="type">
+                <option value="">Select a event type…</option>
+              <option [value]="eventType.name" *ngFor="let eventType of eventTypes"> {{eventType.name | titlecase}}</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="billing_password_field">
+            <label for="billing_password" class="control-label">
+              <span class="grey">Party Supported:</span>
+              <span class="required">*</span>
+            </label>
+
+            <input type="text" class="form-control "  [(ngModel)]="event.partySupported" name="partySupported" id="partySupported" placeholder="Any party supported your event." value="partySupported" required />
+
+          </div>
 
           <div class="form-group" id="billing_password_field">
             <label for="billing_password" class="control-label">
@@ -124,84 +169,71 @@
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_password" id="billing_password" placeholder="" value="">
+            <input type="password" class="form-control "  [(ngModel)]="event.password" name="password" id="password" placeholder="Please enter password." value="123456" required />
 
           </div>
 
-
-          <div class="form-group">
-
-            <div class="radio">
-              <label>
-                <input type="radio" name="radioButton"> Ship to this address
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="radioButton"> Ship to different address
-              </label>
-            </div>
-
-          </div>
-
+          
         </div>
 
         <div class="col-sm-6">
 
           <div class="form-group">
             <label for="billing_state" class="control-label">
-              <span class="grey">State/Province:</span>
+              <span class="grey">  Town / City:</span>
               <span class="required">*</span>
             </label>
 
-            <select class="form-control" name="billing_state" id="billing_state">
-              <option value="">Select a country…</option>
-              <option value="AX">Åland Islands</option>
-              <option value="AF">Afghanistan</option>
-              <option value="AL">Albania</option>
-              <option value="GA">Gabon</option>
-              <option value="GM">Gambia</option>
-              <option value="GE">Georgia</option>
-              <option value="DE">Germany</option>
-              <option value="GH">Ghana</option>
-              <option value="AE">United Arab Emirates</option>
-              <option value="GB" selected="selected">United Kingdom (UK)</option>
-              <option value="ZW">Zimbabwe</option>
+            <select class="form-control"  [(ngModel)]="event.city" name="city" id="city">
+              <option value="" selected="selected">Select a city…</option>
+              <option [value]="city.name" *ngFor="let city of cities"> {{city.name}}</option> 
             </select>
           </div>
 
           <div class="form-group">
             <label for="billing_country" class="control-label">
-              <span class="grey">Country:</span>
+              <span class="grey">State/Province:</span>
               <span class="required">*</span>
             </label>
 
-            <select class="form-control" name="billing_country" id="billing_country">
+            <select class="form-control"  [(ngModel)]="event.state" name="state" id="state" (change)="loadCityAndDistrict($event.target.value)">
               <option value="">Select a country…</option>
-              <option value="AX">Åland Islands</option>
-              <option value="AF">Afghanistan</option>
-              <option value="AL">Albania</option>
-              <option value="GA">Gabon</option>
-              <option value="GM">Gambia</option>
-              <option value="GE">Georgia</option>
-              <option value="DE">Germany</option>
-              <option value="GH">Ghana</option>
-              <option value="AE">United Arab Emirates</option>
-              <option value="GB" selected="selected">United Kingdom (UK)</option>
-              <option value="ZW">Zimbabwe</option>
+              <option [value]="state.abbr" *ngFor="let state of states"> {{state.name}}</option>              
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="billing_country" class="control-label">
+              <span class="grey">Participates Type:</span>
+              <span class="required">*</span>
+            </label>
+
+            <select class="form-control"  [(ngModel)]="event.participantsType" name="participantsType" id="participantsType">
+              <option value="">Select a particitants…</option>
+              <option [value]="particitantType.name" *ngFor="let particitantType of particitantTypes"> {{particitantType.name | titlecase}}</option>
             </select>
           </div>
 
           <div class="form-group validate-required validate-fax" id="billing_fax_field">
             <label for="billing_fax" class="control-label">
-              <span class="grey">Fax:</span>
+              <span class="grey">Number Of Participates:</span>
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_fax" id="billing_fax" placeholder="" value="">
+            <input type="number" class="form-control "  [(ngModel)]="event.numberOfParticipants" name="numberOfParticipants" id="numberOfParticipants" placeholder="Please enter number of Participates." value="0" required />
 
           </div>
 
+
+          <div class="form-group" id="billing_password2_field">
+            <label for="billing_password2" class="control-label">
+              <span class="grey">Start Date:</span>
+              <span class="required">*</span>
+            </label>
+
+            <input type="date" class="form-control "  [(ngModel)]="event.startDate" name="startDate" id="startDate" placeholder="Please re enter password." value="" required />
+
+          </div>
 
           <div class="form-group" id="billing_password2_field">
             <label for="billing_password2" class="control-label">
@@ -209,7 +241,7 @@
               <span class="required">*</span>
             </label>
 
-            <input type="text" class="form-control " name="billing_password2" id="billing_password2" placeholder="" value="">
+            <input type="password" class="form-control "  [(ngModel)]="event.confirmPassword" name="confirmPassword" id="confirmPassword" placeholder="Please re enter password." value="123456" required />
 
           </div>
 
@@ -218,7 +250,7 @@
 
         <div class="col-sm-12">
 
-          <button type="submit" class="theme_button wide_button color1 topmargin_40">Register Now</button>
+          <button type="submit" class="theme_button wide_button color1 topmargin_40" [disabled]="!registrationForm.form.valid" >Register Now</button>
           <button type="reset" class="theme_button wide_button">Clear Form</button>
 
         </div>
